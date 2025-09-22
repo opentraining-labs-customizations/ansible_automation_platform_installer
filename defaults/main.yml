@@ -1,0 +1,61 @@
+# AAP version to install
+ansible_automation_platform_version: "2.4"
+
+# Base path to download or find the AAP installer
+ansible_automation_platform_installer_url: "https://example.com/path/to/aap-installers"
+
+# Installer tarball name pattern (it will be dynamically resolved)
+ansible-automation-platform_installer_tarball: "ansible-automation-platform-{{ ansible_automation_platform_version }}-installer.tar.gz"
+ansible_automation_platform_installer_archive: "/tmp/ansible-automation-platform-{{ ansible_automation_platform_version }}-installer.tar.gz"
+ansible_automation_platform_extract_path: "/opt"
+#installer_dir: "{{ ansible_automation_platform_extract_path }}/ansible-automation-platform-setup-bundle-{{ ansible_automation_platform_version }}-installer"
+installer_dir: "/opt/ansible-automation-platform-setup-bundle-2.4-6-x86_64"
+
+
+# Admin credentials (used by the installer inventory)
+admin_user: "admin"
+admin_password: "r3dh4t1!"
+registry_username: "{{ registry_username }}"
+registry_password: "{{ registry_passowrd }}"
+
+# Mandatory variables to define the inventory file and some are Optional Inventory variables
+
+############## 2.4 variable Defining ############################### 
+
+#automationcontroller_hosts:
+#  - controller.example.com
+
+#execution_nodes_hosts:
+# - exec1.example.com
+#  - exec2.example.com
+
+#automationhub_hosts:
+#  - hub.example.com
+
+#automationedacontroller_hosts:
+#  - edac.example.com
+
+#database_hosts:
+#  - db.example.com
+
+############## 2.5 variable Defining ############################### 
+
+#automationgateway_hosts:
+#  - gateway1.example.org
+#  - gateway2.example.org
+
+#automationcontroller_hosts:
+#  - controller1.example.org
+#  - controller2.example.org
+
+#execution_nodes_hosts:
+#  - exec1.example.org
+#  - exec2.example.org
+
+#automationhub_hosts:
+#  - hub1.example.org
+#  - hub2.example.org
+
+#automationedacontroller_hosts:
+#  - eda1.example.org
+#  - eda2.example.org

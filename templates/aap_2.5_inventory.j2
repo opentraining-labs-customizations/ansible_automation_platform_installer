@@ -1,0 +1,79 @@
+{% if automationgateway_hosts is not defined or automationgateway_hosts | length == 0 %}
+{% raw %}
+ERROR: 'automationgateway_hosts' must be defined and contain at least one host.
+{% endraw %}
+{% else %}
+[automationgateway]
+{% for host in automationgateway_hosts %}
+{{ host }}
+{% endfor %}
+{% endif %}
+
+[automationcontroller]
+{% for host in automationcontroller_hosts | default([]) %}
+{{ host }}
+{% endfor %}
+
+[automationcontroller:vars]
+peers={{ automationcontroller_peers | default('execution_nodes') }}
+
+[execution_nodes]
+{% for node in execution_nodes_hosts | default([]) %}
+{% if node is string %}
+{{ node }}
+{% elif node.host is defined %}
+{{ node.host }}{% if node.node_type is defined %} node_type='{{ node.node_type }}'{% endif %}
+{% endif %}
+{% endfor %}
+
+[automationhub]
+{% for host in automationhub_hosts | default([]) %}
+{{ host }}
+{% endfor %}
+
+[automationedacontroller]
+{% for host in automationedacontroller_hosts | default([]) %}
+{{ host }}
+{% endfor %}
+
+[database]
+{% if database_hosts is not defined or database_hosts | length != 1 %}
+{% raw %}
+ERROR: You must define exactly one host in 'database_hosts'
+{% endraw %}
+{% else %}
+[database]
+{{ database_hosts[0] }}
+{% set pg_host = database_hosts[0] }}
+{% endif %}
+
+[all:vars]
+
+redis_mode='standalone'
+
+registry_username={{ registry_username }}
+registry_password={{ registry_password }}
+
+automationgateway_admin_password={{ automationgateway_admin_password | default('redhat1') }}
+automationgateway_pg_host={{ pg_host }}
+automationgateway_pg_database={{ automationgateway_pg_database | default('automationgateway') }}
+automationgateway_pg_username={{ automationgateway_pg_username | default('automationgateway') }}
+automationgateway_pg_password={{ admin_password }}
+
+admin_password={{ admin_password }}
+pg_host={{ pg_host }}
+pg_database={{ pg_database | default('awx') }}
+pg_username={{ pg_username | default('awx') }}
+pg_password={{ admin_password }}
+
+automationhub_admin_password={{ automationhub_admin_password | default('<set your own>') }}
+automationhub_pg_host={{ pg_host }}
+automationhub_pg_database={{ automationhub_pg_database | default('automationhub') }}
+automationhub_pg_username={{ automationhub_pg_username | default('automationhub') }}
+automationhub_pg_password={{ admin_password }}
+
+automationedacontroller_admin_password={{ automationedacontroller_admin_password | default('<set your own>') }}
+automationedacontroller_pg_host={{ pg_host }}
+automationedacontroller_pg_database='{{ automationedacontroller_pg_database | default("automationedacontroller") }}'
+automationedacontroller_pg_username='{{ automationedacontroller_pg_username | default("automationedacontroller") }}'
+automationedacontroller_pg_password='{{ admin_password }}'

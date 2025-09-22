@@ -1,0 +1,81 @@
+[automationcontroller]
+{% for host in automationcontroller_hosts | default(['localhost']) %}
+{{ host }}
+{% endfor %}
+
+[automationcontroller:vars]
+peers={{ automationcontroller_peers | default('execution_nodes') }}
+
+[execution_nodes]
+{% for host in execution_nodes_hosts | default([]) %}
+{{ host }}
+{% endfor %}
+
+[automationhub]
+{% for host in automationhub_hosts | default([]) %}
+{{ host }}
+{% endfor %}
+
+[automationedacontroller]
+{% for host in automationedacontroller_hosts | default([]) %}
+{{ host }}
+{% endfor %}
+
+
+{# --- Determine the database host --- #}
+{% if database_hosts is defined and database_hosts | length == 1 %}
+[database]
+{{ database_hosts[0] }}
+{% set pg_host = database_hosts[0] %}
+
+{% elif (database_hosts is not defined or database_hosts | length == 0)
+     and automationcontroller_hosts is defined and automationcontroller_hosts | length == 1 %}
+[database]
+{{ automationcontroller_hosts[0] }}
+{% set pg_host = automationcontroller_hosts[0] %}
+
+{% else %}
+{% raw %}
+ERROR: You must define exactly one host in 'database_hosts',
+or define exactly one host in 'automationcontroller_hosts' to infer it as the database host.
+{% endraw %}
+{% endif %}
+
+[all:vars]
+admin_password='{{ admin_password }}'
+
+ansible_become=true
+ignore_preflight_errors=true
+pg_host='{{ pg_host }}'
+pg_port={{ pg_port | default(5432) }}
+
+pg_database='{{ pg_database | default("awx") }}'
+pg_username='{{ pg_username | default("awx") }}'
+pg_password='{{ pg_password | default("redhat1") }}'
+pg_sslmode='{{ pg_sslmode | default("prefer") }}'
+
+registry_url='{{ registry_url | default("registry.redhat.io") }}'
+registry_username='{{ registry_username }}'
+registry_password='{{ registry_password }}'
+
+receptor_listener_port={{ receptor_listener_port | default(27199) }}
+
+automationhub_admin_password='{{ admin_password }}'
+
+automationhub_pg_host='{{ pg_host }}'
+automationhub_pg_port={{ automationhub_pg_port | default(5432) }}
+
+automationhub_pg_database='{{ automationhub_pg_database | default("automationhub") }}'
+automationhub_pg_username='{{ automationhub_pg_username | default("automationhub") }}'
+automationhub_pg_password='{{ admin_password }}'
+automationhub_pg_sslmode='{{ automationhub_pg_sslmode | default("prefer") }}'
+
+automationedacontroller_admin_password='{{ admin_password }}'
+
+automationedacontroller_pg_host='{{ pg_host }}'
+automationedacontroller_pg_port={{ automationedacontroller_pg_port | default(5432) }}
+
+automationedacontroller_pg_database='{{ automationedacontroller_pg_database | default("automationedacontroller") }}'
+automationedacontroller_pg_username='{{ automationedacontroller_pg_username | default("automationedacontroller") }}'
+automationedacontroller_pg_password='{{ admin_password }}'
+automationedacontroller_pg_sslmode='{{ automationedacontroller_pg_sslmode | default("prefer") }}'

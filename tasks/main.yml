@@ -1,0 +1,52 @@
+---
+  - name: Ensure installer directory exists
+    ansible.builtin.file:
+      path: "{{ ansible_automation_platform_extract_path }}"
+      state: directory
+      mode: '0755'
+
+  - name: Download Ansible Automation Platform installer
+    ansible.builtin.get_url:
+      url: "{{ ansible_automation_platform_installer_url }}"
+      dest: "{{ ansible_automation_platform_installer_archive }}"
+      mode: '0644'
+
+  - name: Extract installer
+    become: true
+    ansible.builtin.unarchive:
+      src: "{{ ansible_automation_platform_installer_archive }}"
+      dest: "{{ ansible_automation_platform_extract_path }}"
+      remote_src: yes
+    register: extracted_installer # Register the output of the unarchive task
+
+  - name: Print extracted file name
+    ansible.builtin.debug:
+     msg: "Extracted file(s): {{ extracted_installer.files | map(attribute='path') | join(', ') }}"
+    when: extracted_installer.files is defined and extracted_installer.files | length > 0
+  
+  - name: Copy inventory template based on AAP version
+    become: true
+    ansible.builtin.template:
+      src: "{{ 'aap_2.4_inventory.j2' if ansible_automation_platform_version == '2.4' else
+               'aap_2.5_inventory.j2' if ansible_automation_platform_version == '2.5' }}"
+      dest: "{{ extracted_installer.files[0].path }}/inventory"
+      mode: '0644'
+ 
+  - name: Run Ansible Automation Platform installer
+    become: true
+    ansible.builtin.command: "ansible_automation_platform_extract_path ./setup.sh"
+    args:
+      chdir: "{{ installer_dir }}"
+    register: install_result
+    failed_when: install_result.rc != 0
+    changed_when: "'Complete' in install_result.stdout"
+
+  - name: Show installer output
+    ansible.builtin.debug:
+      var: install_result.stdout
+
+  - name: Remove extracted Ansible Automation Platform installer directory
+    become: true
+    ansible.builtin.file:
+      path: "{{ installer_dir }}"
+      state: absent
