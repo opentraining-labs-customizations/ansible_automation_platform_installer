@@ -51,12 +51,12 @@ pg_port={{ pg_port | default(5432) }}
 
 pg_database='{{ pg_database | default("awx") }}'
 pg_username='{{ pg_username | default("awx") }}'
-pg_password='{{ pg_password | default("redhat1") }}'
+pg_password='{{ pg_password | default("redhat") }}'
 pg_sslmode='{{ pg_sslmode | default("prefer") }}'
 
 registry_url='{{ registry_url | default("registry.redhat.io") }}'
-registry_username='{{ registry_username }}'
-registry_password='{{ registry_password }}'
+registry_username='{{ registry_username | default("") }}'
+registry_password='{{ registry_password | default("") }}'
 
 receptor_listener_port={{ receptor_listener_port | default(27199) }}
 
