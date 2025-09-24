@@ -15,8 +15,6 @@ installer_dir: "/opt/ansible-automation-platform-setup-bundle-2.4-6-x86_64"
 # Admin credentials (used by the installer inventory)
 admin_user: "admin"
 admin_password: "r3dh4t1!"
-registry_username: "{{ registry_username }}"
-registry_password: "{{ registry_passowrd }}"
 
 # Mandatory variables to define the inventory file and some are Optional Inventory variables
 
