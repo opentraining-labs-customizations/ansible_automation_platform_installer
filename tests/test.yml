@@ -3,4 +3,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - ansible_automation_platform_installation
+    - ansible_automation_platform_installer
