@@ -17,24 +17,18 @@
       src: "{{ ansible_automation_platform_installer_archive }}"
       dest: "{{ ansible_automation_platform_extract_path }}"
       remote_src: yes
-    register: extracted_installer # Register the output of the unarchive task
-
-  - name: Print extracted file name
-    ansible.builtin.debug:
-     msg: "Extracted file(s): {{ extracted_installer.files | map(attribute='path') | join(', ') }}"
-    when: extracted_installer.files is defined and extracted_installer.files | length > 0
-  
+    
   - name: Copy inventory template based on AAP version
     become: true
     ansible.builtin.template:
       src: "{{ 'aap_2.4_inventory.j2' if ansible_automation_platform_version == '2.4' else
                'aap_2.5_inventory.j2' if ansible_automation_platform_version == '2.5' }}"
-      dest: "{{ extracted_installer.files[0].path }}/inventory"
+      dest: "{{ installer_dir }}/inventory"
       mode: '0644'
  
   - name: Run Ansible Automation Platform installer
     become: true
-    ansible.builtin.command: "ansible_automation_platform_extract_path ./setup.sh"
+    ansible.builtin.command: "./setup.sh"
     args:
       chdir: "{{ installer_dir }}"
     register: install_result
