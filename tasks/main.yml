@@ -28,7 +28,7 @@
  
   - name: Run Ansible Automation Platform installer
     become: true
-    ansible.builtin.command: "./setup.sh"
+    ansible.builtin.command: "./setup.sh -- -e gpgcheck=0"
     args:
       chdir: "{{ installer_dir }}"
     register: install_result
