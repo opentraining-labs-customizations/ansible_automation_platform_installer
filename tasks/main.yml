@@ -9,6 +9,8 @@
     ansible.builtin.get_url:
       url: "{{ ansible_automation_platform_installer_url }}"
       dest: "{{ ansible_automation_platform_installer_archive }}"
+      url_username: "{{ s3_rhpds_private_username }}"
+      url_password: "{{ s3_rhpds_private_password }}"
       mode: '0644'
 
   - name: Extract installer
