@@ -13,7 +13,7 @@ installer_dir: "/opt/ansible-automation-platform-setup-bundle-2.4-13-x86_64"
 
 # Admin credentials (used by the installer inventory)
 admin_user: "admin"
-admin_password: "r3dh4t1!"
+admin_password: "redhat"
 
 url_username: "{{ username }}"
 url_password: "{{ password }}"
