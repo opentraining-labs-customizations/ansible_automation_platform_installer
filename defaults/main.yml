@@ -9,8 +9,7 @@ ansible-automation-platform_installer_tarball: "ansible-automation-platform-{{ a
 ansible_automation_platform_installer_archive: "/tmp/ansible-automation-platform-{{ ansible_automation_platform_version }}-installer.tar.gz"
 ansible_automation_platform_extract_path: "/opt"
 #installer_dir: "{{ ansible_automation_platform_extract_path }}/ansible-automation-platform-setup-bundle-{{ ansible_automation_platform_version }}-installer"
-installer_dir: "/opt/ansible-automation-platform-setup-bundle-2.4-6-x86_64"
-
+installer_dir: "/opt/ansible-automation-platform-setup-bundle-2.4-13-x86_64"
 
 # Admin credentials (used by the installer inventory)
 admin_user: "admin"
